@@ -337,8 +337,8 @@ String WIFI::showStatus(void)
        }
     }
 
-          char head[4] = {0x0D,0x0A};   //头部多余字符串
-          char tail[7] = {0x0D,0x0A,0x0D,0x0A};        //尾部多余字符串
+          char head[2] = {0x0D,0x0A};   //头部多余字符串
+          char tail[4] = {0x0D,0x0A,0x0D,0x0A};        //尾部多余字符串
           data.replace("AT+ShowSTA","");
           data.replace("done","");
           data.replace(head,"");
@@ -431,7 +431,8 @@ void WIFI::newMux(byte type, String addr, int port)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("done")!=-1 || data.indexOf("ALREAY CONNECT")!=-1 || data.indexOf("ERROR")!=-1)
+	 
+     if (data.indexOf("one")!=-1 || data.indexOf("ALEAY CONNECT")!=-1 || data.indexOf("ERROR")!=-1)     //bug  "done"  "ALREAY CONNECT"   
      {
          break;
      }
@@ -512,7 +513,7 @@ void WIFI::Send(String str)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("SEND OK")!=-1)
+     if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1)
      {
          break;
      }
@@ -550,7 +551,7 @@ void WIFI::Send(byte id, String str)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("SEND OK")!=-1)
+     if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1)
      {
          break;
      }
