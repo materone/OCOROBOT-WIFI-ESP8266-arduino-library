@@ -1,7 +1,7 @@
-#ifndef __UARLWIFI_H__
-#define __UARLWIFI_H__
+﻿#ifndef __UARLWIFI_328_H__
+#define __UARLWIFI_328_H__
 #include <Arduino.h>
-#include <SoftwareSerial.h>
+#include <SoftwareSeriala.h>
 
 #define    OPEN          0
 #define    WEP           1
@@ -21,8 +21,6 @@
 #define    AP      2
 #define    AT+STA  3
 
-#define SERIAL_TX_BUFFER_SIZE 128
-#define SERIAL_RX_BUFFER_SIZE 128
 
 class WIFI
 {
