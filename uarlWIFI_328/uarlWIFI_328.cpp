@@ -297,7 +297,7 @@ String data;
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("one")!=-1 || data.indexOf("ERROR")!=-1 )
+     if (data.indexOf("one")!=-1 || data.indexOf("ERROR")!=-1 )   //bug "done"
      {
          break;
      }
@@ -403,7 +403,7 @@ void WIFI::confMux(boolean a)
   char a =mySerial.read();
   data=data+a;
   }
-  if (data.indexOf("one")!=-1 || data.indexOf("RROR")!=-1 || data.indexOf("Link is builded")!=-1)
+  if (data.indexOf("one")!=-1 || data.indexOf("RROR")!=-1 || data.indexOf("Link is builded")!=-1)    //bug  "done"  "ERROR"
   {
       break;
   }
@@ -642,7 +642,7 @@ void WIFI::closeMux(byte id)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("one")!=-1 || data.indexOf("Link is not")!=-1 || data.indexOf("Cant close")!=-1)
+     if (data.indexOf("one")!=-1 || data.indexOf("Link is not")!=-1 || data.indexOf("Cant close")!=-1)   //BUG    "done"
      {
          break;
      }
@@ -700,7 +700,7 @@ void WIFI::confServer(byte mode, int port)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("one")!=-1 || data.indexOf("Link is builded")!=-1 || data.indexOf("RROR")!=-1)
+     if (data.indexOf("one")!=-1 || data.indexOf("Link is builded")!=-1 || data.indexOf("RROR")!=-1)  //BUG    "done" "ERROE"
      {
          break;
      }
