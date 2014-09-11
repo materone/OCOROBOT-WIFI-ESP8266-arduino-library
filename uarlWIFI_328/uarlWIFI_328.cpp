@@ -56,7 +56,7 @@ String WIFI::showMode()
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("done")!=-1)
+     if (data.indexOf("one")!=-1)
      {
          break;
      }
@@ -95,7 +95,7 @@ void WIFI::confMode(byte a)
       char a =mySerial.read();
       data=data+a;
       }
-      if (data.indexOf("done")!=-1 || data.indexOf("no change")!=-1)
+      if (data.indexOf("done")!=-1 || data.indexOf("nochange")!=-1)  //bug "nochange"
       {
           break;
       }
@@ -200,7 +200,7 @@ void WIFI::confJAP(String ssid , String pwd)
 
 
     while (1) {                            //当串口有完成数据返回时，结束语句
-        if(mySerial.find("done")==true)
+        if(mySerial.find("one")==true)
         {
            break;
         }
@@ -289,13 +289,21 @@ void WIFI::confSAP(String ssid , String pwd , byte chl , byte ecn)
 
     mySerial.print(",");
     mySerial.println(String(ecn));
-    while (1) {                            //当串口有完成数据返回时，结束语句
-        if(mySerial.find("done")==true ||mySerial.find("ERROR")==true)
-        {
-           break;
-        }
+
+String data;
+    while (1) {
+     if(mySerial.available()>0)
+     {
+     char a =mySerial.read();
+     data=data+a;
+     }
+     if (data.indexOf("one")!=-1 || data.indexOf("ERROR")!=-1 )
+     {
+         break;
      }
 
+
+}
 }
 
 
@@ -385,15 +393,21 @@ String WIFI::showMux(void)
 void WIFI::confMux(boolean a)
 {
   
- 
+ String data;
  mySerial.print("AT+MUX=");
  mySerial.println(a);           //发送AT指令
- while (1) {                            //当串口有完成数据返回时，结束语句
-     if(mySerial.find("done")==true || mySerial.find("Link is builded")==true)
-     {
-        break;
-     }
+
+ while (1) {
+  if(mySerial.available()>0)
+  {
+  char a =mySerial.read();
+  data=data+a;
   }
+  if (data.indexOf("one")!=-1 || data.indexOf("RROR")!=-1 || data.indexOf("Link is builded")!=-1)
+  {
+      break;
+  }
+}
 }
 
 
@@ -450,9 +464,10 @@ void WIFI::newMux( byte id, byte type, String addr, int port)
   
  
     mySerial.print("AT+NewSTA=");
-    mySerial.print("\"");
+   // mySerial.print("\"");
     mySerial.print(String(id));
-    mySerial.print("\"");
+    //mySerial.print("\"");
+    mySerial.print(",");
     if(type>0)
     {
         mySerial.print("\"tcp\"");
@@ -476,7 +491,7 @@ void WIFI::newMux( byte id, byte type, String addr, int port)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("done")!=-1 || data.indexOf("ALREAY CONNECT")!=-1 || data.indexOf("ERROR")!=-1)
+     if (data.indexOf("one")!=-1 || data.indexOf("ALEAY CONNECT")!=-1 || data.indexOf("RROR")!=-1 || data.indexOf("Linktyp ERROR")!=-1)    //BUG   "done","ALREAY CONNECT","ERROE","Link typ ERROR"
      {
          break;
      }
@@ -492,32 +507,42 @@ void WIFI::newMux( byte id, byte type, String addr, int port)
 void WIFI::Send(String str)
 {
   
- 
+    String data;
     mySerial.print("AT+UpDate=");
 //    mySerial.print("\"");
     mySerial.println(str.length());
 //    mySerial.println("\"");
-    while (1) {                            //当串口有完成数据返回时，结束语句
-        if(mySerial.find(">")==true )
+    while (1) {                 //当串口有完成数据返回时，结束语句
+
+        if(mySerial.available()>0)
         {
+        char a =mySerial.read();
+        data=data+a;
+        }
+        if(data.indexOf(">")!=-1 )
+        {
+           mySerial.println(str);
            break;
+
+        }
+        if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1 || data.indexOf("not")!=-1)  //BUG  "link is not"
+        {
+            break;
         }
      }
-    mySerial.println(str);
 
-
-    String data;
     while (1) {
-     if(mySerial.available()>0)
-     {
-     char a =mySerial.read();
-     data=data+a;
+        if(mySerial.available()>0)
+        {
+        char a =mySerial.read();
+        data=data+a;
+        }
+
+        if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1 || data.indexOf("not")!=-1)  //BUG  "link is not"
+        {
+            break;
+        }
      }
-     if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1)
-     {
-         break;
-     }
-  }
 }
 
 /*==============================================*/
@@ -529,33 +554,44 @@ void WIFI::Send(String str)
 void WIFI::Send(byte id, String str)
 {
   
- 
+    String data;
     mySerial.print("AT+UpDate=");
 
     mySerial.print(String(id));
-    mySerial.println(",");
+    mySerial.print(",");
     mySerial.println(str.length());
-    while (1) {                            //当串口有完成数据返回时，结束语句
-        if(mySerial.find(">")==true )
+    while (1) {                 //当串口有完成数据返回时，结束语句
+
+        if(mySerial.available()>0)
         {
+        char a =mySerial.read();
+        data=data+a;
+        }
+        if(data.indexOf(">")!=-1 )
+        {
+           mySerial.println(str);
            break;
+
+        }
+        if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1 || data.indexOf("not")!=-1)  //BUG  "link is not"
+        {
+            break;
         }
      }
-    mySerial.println(str);
 
-
-    String data;
     while (1) {
-     if(mySerial.available()>0)
-     {
-     char a =mySerial.read();
-     data=data+a;
+        if(mySerial.available()>0)
+        {
+        char a =mySerial.read();
+        data=data+a;
+        }
+
+        if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1 || data.indexOf("not")!=-1)  //BUG  "link is not"
+        {
+            break;
+        }
      }
-     if (data.indexOf("SEND OK")!=-1 || data.indexOf("Unlink")!=-1)
-     {
-         break;
-     }
-  }
+
 }
 
 /*========================================*/
@@ -578,7 +614,7 @@ void WIFI::closeMux(void)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("Linked")!=-1 || data.indexOf("ERROR")!=-1 || data.indexOf("we must restart")!=-1)
+     if (data.indexOf("Linked")!=-1 || data.indexOf("RROR")!=-1 || data.indexOf("we must restart")!=-1)   //BUG    "ERROR"
      {
          break;
      }
@@ -606,7 +642,7 @@ void WIFI::closeMux(byte id)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("done")!=-1 || data.indexOf("Link is not")!=-1 || data.indexOf("Cant close")!=-1)
+     if (data.indexOf("one")!=-1 || data.indexOf("Link is not")!=-1 || data.indexOf("Cant close")!=-1)
      {
          break;
      }
@@ -664,7 +700,7 @@ void WIFI::confServer(byte mode, int port)
      char a =mySerial.read();
      data=data+a;
      }
-     if (data.indexOf("done")!=-1 || data.indexOf("Link is builded")!=-1)
+     if (data.indexOf("one")!=-1 || data.indexOf("Link is builded")!=-1 || data.indexOf("RROR")!=-1)
      {
          break;
      }
